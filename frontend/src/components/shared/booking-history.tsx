@@ -23,49 +23,61 @@ export function BookingHistory({ userId }: BookingHistoryProps) {
 
   return (
     <Card className="p-3">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>№ Места</TableHead>
-            <TableHead>Улица</TableHead>
-            <TableHead>Дата</TableHead>
-            <TableHead>Время</TableHead>
-            <TableHead>Статус</TableHead>
-            <TableHead>Действия</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.map((reservation: Reservation) => (
-            <TableRow key={reservation.id}>
-              <TableCell className="font-medium">
-                {reservation.parkingSpot.identifier}
-              </TableCell>
-              <TableCell className="font-medium">
-                {reservation.parkingSpot.location}
-              </TableCell>
-              <TableCell>
-                {new Date(
-                  new Date(reservation.reservedDate).setDate(
-                    new Date(reservation.reservedDate).getDate() + 1
-                  )
-                ).toLocaleDateString("ru-RU")}
-              </TableCell>
-              <TableCell>{reservation.reservedTime}:00</TableCell>
-              <TableCell>{reservation.status}</TableCell>
-              <TableCell>
-                {reservation.status.toLowerCase() === "booked" && (
-                  <Button
-                    className="text-red-200 hover:text-red-400 hover:cursor-pointer"
-                    onClick={() => mutate(reservation.id)}
-                  >
-                    Отменить
-                  </Button>
-                )}
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="min-w-[100px]">№ Места</TableHead>
+              <TableHead className="min-w-[150px]">Улица</TableHead>
+              <TableHead className="min-w-[100px] hidden md:table-cell">
+                Дата
+              </TableHead>
+              <TableHead className="min-w-[80px] hidden sm:table-cell">
+                Время
+              </TableHead>
+              <TableHead className="min-w-[100px] hidden sm:table-cell">
+                Статус
+              </TableHead>
+              <TableHead className="min-w-[100px]">Действия</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {data?.map((reservation: Reservation) => (
+              <TableRow key={reservation.id}>
+                <TableCell className="font-medium">
+                  {reservation.parkingSpot.identifier}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {reservation.parkingSpot.location}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {new Date(
+                    new Date(reservation.reservedDate).setDate(
+                      new Date(reservation.reservedDate).getDate() + 1
+                    )
+                  ).toLocaleDateString("ru-RU")}
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  {reservation.reservedTime}:00
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  {reservation.status}
+                </TableCell>
+                <TableCell>
+                  {reservation.status.toLowerCase() === "booked" && (
+                    <Button
+                      className="text-red-200 hover:text-red-400 hover:cursor-pointer"
+                      onClick={() => mutate(reservation.id)}
+                    >
+                      Отменить
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </Card>
   );
 }
